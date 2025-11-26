@@ -1,0 +1,17 @@
+# Binary directories
+bin/
+bin/firmware/
+
+# Compiled binaries
+*.bin
+*.exe
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+
+# Temporary files
+*.zip
+*.tar.gz

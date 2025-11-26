@@ -1,54 +1,67 @@
 # Nest Thermostat Firmware Setup
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-donate-yellow.svg)](https://buymeacoffee.com/codykociemba)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white)](https://discord.gg/hackhouse)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-blue)](https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/tag/v1.0.0)
 
-> **⚠️ WARNING: EXPERIMENTAL SOFTWARE**
->
-> This project is currently in the **experimental/testing phase**. Do NOT use this firmware on any thermostat that is critical for your heating or cooling needs. Flashing this firmware may brick your device or cause unexpected behavior. Only proceed if you have a backup thermostat or can afford to have your device non-functional during testing.
-
-## A Note from the Developer
-
-This project has blown up way more than I ever expected! I want to be transparent: this was thrown together in a couple of days, so it's still very new and a work in progress. Thank you all so much for your support and enthusiasm!
-
-**Support the Project:**
-Developing and maintaining open-source projects takes a lot of time (and late nights). If this project helped you reclaim your device or you just want to support the effort to keep this hardware usable, consider buying me a coffee. It keeps the code flowing and the development going!
-
-<a href="https://buymeacoffee.com/codykociemba" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-
-**Self-Hosted Open Source Option Available:** A self-hosted open source solution has been posted on the [`open-source-prototype`](https://github.com/codykociemba/NoLongerEvil-Thermostat/tree/open-source-prototype) branch. Check out the [discussion here](https://github.com/codykociemba/NoLongerEvil-Thermostat/discussions/34) for more details.
+<div align="center">
+  <a href="https://bounties.fulu.org/bounties/nest-learning-thermostat-gen-1-2">
+    <img src="assets/fulu-bounties.svg" alt="FULU Bounties Winner" width="500">
+  </a>
+  <h2>🏆 FULU Bounty Winner 🏆</h2>
+  <p><strong><a href="https://hackhouse.io">Hack House</a></strong> and this project are the official winners of the <strong><a href="https://bounties.fulu.org/bounties/nest-learning-thermostat-gen-1-2">FULU Bounty for Nest Learning Thermostat Gen 1/2</a></strong></p>
+</div>
 
 **Hardware Alternative:** If you're interested in the hardware side of things, check out [https://sett.homes](https://sett.homes) for a drop-in PCB replacement option.
 
-**Important:** The README instructions below are for the hosted version only. If you're adventurous, feel free to dive into the self-hosted branch. Otherwise, you may want to wait until it's been fully fleshed out if you don't want to deal with bugs.
+---
+
+## Installation Options
+
+Choose the installation method that works best for you:
+
+### Option 1: Hosted (GUI Installer) - **Recommended**
+
+The easiest way to get started. Download our GUI installer that handles everything automatically.
+
+📖 **[View Installation Guide](https://docs.nolongerevil.com/hosted/installation)**
+
+### Option 2: Hosted (Manual)
+
+If the GUI installer doesn't work for you, follow the manual installation steps below. This method uses command-line tools to flash the firmware.
+
+### Option 3: Self-Hosted - **Advanced Users Only**
+
+Host your own No Longer Evil server infrastructure. Requires technical expertise.
+
+📖 **[View Self-Hosted Guide](https://docs.nolongerevil.com/self-hosted/overview)**
+
+⚠️ **Warning:** This option is still a work in progress and may or may not function properly. Check out the [discussion here](https://github.com/codykociemba/NoLongerEvil-Thermostat/discussions/34) for more details.
 
 ---
 
+## Manual Installation (Option 2)
+
 This directory contains the tools and firmware needed to flash custom firmware to Nest Thermostat devices using the OMAP DFU (Device Firmware Update) interface.
 
-## Prerequesites
+### Prerequesites
 
-You will need to have, ideally, a linux computer available. MacOS can also be used but some people are having difficulties. Windows should be able to be used with MingW or CygWin but YMMV.
+You will need to have a Linux or MacOS computer available.
 
-⚠️ This firmware is only for Nest Generation 1 and 2. On the back plate you should see a bubble level, which should be green. If it's blue, that's gen 3 and not supported yet.
+⚠️ Please verify your Nest is compatible at **[https://docs.nolongerevil.com/compatibility](https://docs.nolongerevil.com/compatibility)** - we currently only support Nest Generation 1 and 2 at the moment.
 
-## Overview
-
-This firmware loader uses the OMAP bootloader interface to flash custom bootloader and kernel images to Nest Thermostat devices. The device must be put into DFU mode to accept new firmware.
-
-**Important:** After flashing this firmware, your device will no longer contact Nest/Google servers. It will operate independently and connect to the NoLongerEvil platform instead, giving you complete control over your thermostat.
-
-## How it Works
+### How it Works
 
 The custom firmware flashes the device with modified bootloader and kernel components that redirect all network traffic from the original Nest/Google servers to a server we specify. This server hosts a reverse-engineered replica of their API, allowing the thermostat to function independently while giving you complete control over your device data and settings.
 
-By intercepting the communication layer, the thermostat believes it's communicating with the official Nest infrastructure, but instead connects to the NoLongerEvil platform. This approach ensures full compatibility with the device's existing software while breaking free from Google's cloud dependency.
+By intercepting the communication layer, the thermostat believes it's communicating with the official Nest infrastructure, but instead connects to the No Longer Evil platform. This approach ensures full compatibility with the device's existing software while breaking free from Google's cloud dependency.
 
 ## Quick Start
 
 ### 1. Clone the Repository
 
 ```bash
-git clone --recurse-submodules https://github.com/codykociemba/NoLongerEvil-Thermostat.git
+git clone https://github.com/codykociemba/NoLongerEvil-Thermostat.git
 cd NoLongerEvil-Thermostat
 ```
 
@@ -88,20 +101,11 @@ chmod +x build.sh
 ./build.sh
 ```
 
-The build script will automatically detect your operating system (Linux, macOS, or Windows) and build the appropriate binary.
+The build script will automatically detect your operating system and build the appropriate binary.
 
 ### 4. Start the firmware installer
 
 **IMPORTANT: You must start the installer script BEFORE rebooting the device.**
-
-#### Linux
-
-```bash
-chmod +x install.sh
-./install.sh
-```
-
-#### macOS
 
 ```bash
 chmod +x install.sh
@@ -127,9 +131,7 @@ The firmware installer will automatically detect the device and flash the custom
 
 ### 6. Wait for the device to boot
 
-After the firmware is flashed successfully, you should see our logo on the device screen:
-
-![NoLongerEvil Logo](assets/firmware_logo.png)
+After the firmware is flashed successfully, you should see our NLE logo on the device screen.
 
 **Important:**
 - Keep the device plugged in via USB
@@ -148,22 +150,12 @@ You will see a "No devices" screen that prompts you for an entry code.
 
 ### 8. Link your device
 
-To link your Nest device to your NoLongerEvil account:
+To link your Nest device to your No Longer Evil account:
 
 1. On your Nest device, navigate to: **Settings → Nest App → Get Entry Code**
 2. The device will display a unique entry code
-3. Enter this code on the NoLongerEvil dashboard
+3. Enter this code on the No Longer Evil dashboard
 4. Your device is now linked and ready to use!
-
-## What Gets Flashed
-
-The firmware installation process installs three components:
-
-1. **x-load.bin** - First-stage bootloader (X-Loader for OMAP)
-2. **u-boot.bin** - Second-stage bootloader (Das U-Boot) loaded at address 0x80100000
-3. **uImage** - Linux kernel image loaded at address 0x80A00000
-
-After flashing, the device jumps to execution at 0x80100000 (u-boot).
 
 ## Security Considerations
 

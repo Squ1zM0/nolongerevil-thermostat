@@ -49,28 +49,95 @@ fi
 
 echo "Using omap_loader: $OMAP_LOADER"
 echo ""
+
+# Download and extract firmware files
+FIRMWARE_DIR="$SCRIPT_DIR/bin/firmware"
+FIRMWARE_URL="https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
+FIRMWARE_ZIP="$SCRIPT_DIR/bin/firmware-files.zip"
+
+# Create bin and firmware directories if they don't exist
+mkdir -p "$SCRIPT_DIR/bin"
+mkdir -p "$FIRMWARE_DIR"
+
+# Check if firmware files already exist
+if [ -f "$FIRMWARE_DIR/x-load-gen1.bin" ] && [ -f "$FIRMWARE_DIR/x-load-gen2.bin" ] && [ -f "$FIRMWARE_DIR/u-boot.bin" ] && [ -f "$FIRMWARE_DIR/uImage" ]; then
+    echo "========================================="
+    echo "Firmware files already exist, skipping download"
+    echo "========================================="
+    echo ""
+else
+    echo "========================================="
+    echo "Downloading firmware files..."
+    echo "========================================="
+    echo ""
+
+    # Download firmware archive
+    if command -v curl &> /dev/null; then
+        echo "Downloading from: $FIRMWARE_URL"
+        if ! curl -L -o "$FIRMWARE_ZIP" "$FIRMWARE_URL"; then
+            echo "Error: Failed to download firmware files"
+            exit 1
+        fi
+    elif command -v wget &> /dev/null; then
+        echo "Downloading from: $FIRMWARE_URL"
+        if ! wget -O "$FIRMWARE_ZIP" "$FIRMWARE_URL"; then
+            echo "Error: Failed to download firmware files"
+            exit 1
+        fi
+    else
+        echo "Error: Neither curl nor wget found. Please install one of them."
+        exit 1
+    fi
+
+    echo "Download complete!"
+    echo ""
+
+    # Extract firmware files
+    echo "Extracting firmware files..."
+    if ! unzip -o "$FIRMWARE_ZIP" -d "$FIRMWARE_DIR"; then
+        echo "Error: Failed to extract firmware files"
+        echo "Make sure unzip is installed"
+        exit 1
+    fi
+
+    # Clean up zip file
+    rm -f "$FIRMWARE_ZIP"
+
+    echo "Firmware files extracted successfully!"
+    echo ""
+fi
+
+# Prompt for Nest generation
 echo "========================================="
-echo "Waiting for device to enter DFU mode..."
+echo "Nest Generation Selection"
 echo "========================================="
 echo ""
-echo "Instructions:"
-echo "1. Ensure your Nest is charged (50%+ recommended)"
-echo "2. Remove the Nest from the wall mount"
-echo "3. Connect it to your computer via micro USB"
-echo "4. Press and hold the display for 10-15 seconds"
-echo "5. The device will reboot and enter DFU mode"
+echo "Which generation Nest Thermostat do you have?"
+echo "You can check the back plate - the bubble level should be green for Gen 1/2."
 echo ""
-echo "The installer will automatically detect the device and begin flashing..."
+echo "Enter 1 for Generation 1"
+echo "Enter 2 for Generation 2"
+echo ""
+read -p "Generation (1 or 2): " NEST_GEN
+
+# Validate input
+while [[ ! "$NEST_GEN" =~ ^[12]$ ]]; do
+    echo "Invalid input. Please enter 1 or 2."
+    read -p "Generation (1 or 2): " NEST_GEN
+done
+
+echo ""
+echo "Selected: Generation $NEST_GEN"
 echo ""
 
-# Set firmware paths (use absolute paths to avoid issues with sudo)
-XLOAD_BIN="$(cd "$SCRIPT_DIR/bin/firmware" && pwd)/x-load.bin"
-UBOOT_BIN="$(cd "$SCRIPT_DIR/bin/firmware" && pwd)/u-boot.bin"
-UIMAGE_BIN="$(cd "$SCRIPT_DIR/bin/firmware" && pwd)/uImage"
+# Set firmware paths based on generation (use absolute paths to avoid issues with sudo)
+XLOAD_BIN="$(cd "$FIRMWARE_DIR" && pwd)/x-load-gen${NEST_GEN}.bin"
+UBOOT_BIN="$(cd "$FIRMWARE_DIR" && pwd)/u-boot.bin"
+UIMAGE_BIN="$(cd "$FIRMWARE_DIR" && pwd)/uImage"
 
 # Verify firmware files exist
 if [ ! -f "$XLOAD_BIN" ]; then
-    echo "Error: x-load.bin not found at: $XLOAD_BIN"
+    echo "Error: x-load-gen${NEST_GEN}.bin not found at: $XLOAD_BIN"
     exit 1
 fi
 
@@ -88,6 +155,20 @@ echo "Firmware files verified:"
 echo "  x-load: $XLOAD_BIN"
 echo "  u-boot: $UBOOT_BIN"
 echo "  uImage: $UIMAGE_BIN"
+echo ""
+
+echo "========================================="
+echo "Waiting for device to enter DFU mode..."
+echo "========================================="
+echo ""
+echo "Instructions:"
+echo "1. Ensure your Nest is charged (50%+ recommended)"
+echo "2. Remove the Nest from the wall mount"
+echo "3. Connect it to your computer via micro USB"
+echo "4. Press and hold the display for 10-15 seconds"
+echo "5. The device will reboot and enter DFU mode"
+echo ""
+echo "The installer will automatically detect the device and begin flashing..."
 echo ""
 
 # Load firmware (expand all variables before sudo to prevent path issues)
