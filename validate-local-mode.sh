@@ -31,6 +31,16 @@ warn() {
     echo -e "${YELLOW}⚠${NC} $1"
 }
 
+check_syntax() {
+    local file=$1
+    local name=$2
+    if bash -n "$file" 2>/dev/null; then
+        pass "$name has valid bash syntax"
+    else
+        fail "$name has syntax errors"
+    fi
+}
+
 # Test 1: Check install.sh exists and is executable
 echo "Checking installation script..."
 if [ -f "$SCRIPT_DIR/install.sh" ]; then
@@ -145,17 +155,8 @@ fi
 
 # Test 7: Check bash syntax
 echo "Checking script syntax..."
-if bash -n "$SCRIPT_DIR/install.sh" 2>/dev/null; then
-    pass "install.sh has valid bash syntax"
-else
-    fail "install.sh has syntax errors"
-fi
-
-if bash -n "$SCRIPT_DIR/build.sh" 2>/dev/null; then
-    pass "build.sh has valid bash syntax"
-else
-    fail "build.sh has syntax errors"
-fi
+check_syntax "$SCRIPT_DIR/install.sh" "install.sh"
+check_syntax "$SCRIPT_DIR/build.sh" "build.sh"
 
 # Test 8: Check for required directories
 echo "Checking directory structure..."

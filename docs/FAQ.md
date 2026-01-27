@@ -56,7 +56,10 @@ A: Yes. Settings → Display Settings → Layout. Choose from Simple, Compact, o
 ### Sensor Questions
 
 **Q: How accurate are the sensors?**
-A: Temperature accuracy is ±1°F (±0.5°C). Humidity accuracy is ±5% RH. These are the hardware sensor specifications.
+A: The onboard sensors have the following specifications (typical accuracy at room temperature, 20-25°C):
+- Temperature accuracy: ±1°F (±0.5°C) typical
+- Humidity accuracy: ±5% RH typical
+Accuracy may vary outside normal indoor temperature ranges or in extreme humidity conditions.
 
 **Q: The temperature seems off. How do I calibrate?**
 A: Settings → Sensor Calibration → Temperature Offset. Adjust by -5°F to +5°F based on a reference thermometer.

@@ -169,9 +169,11 @@ Humidity: 41%
 ### Visual Indicators
 
 **Humidity Comfort Levels (Optional):**
-- 💧 Low: < 30% (Too Dry)
-- 💧💧 Good: 30-60% (Comfortable)
-- 💧💧💧 High: > 60% (Too Humid)
+- Low: < 30% (Too Dry)
+- Good: 30-60% (Comfortable)  
+- High: > 60% (Too Humid)
+
+Note: Visual indicators may use droplet emojis where supported, or text-based indicators for compatibility.
 
 **Status Icons:**
 - ● Local Mode Active (bottom corner)
