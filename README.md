@@ -38,20 +38,24 @@ Host your own No Longer Evil server infrastructure. Requires technical expertise
 
 ⚠️ **Warning:** This option is still a work in progress and may or may not function properly. Check out the [discussion here](https://github.com/codykociemba/NoLongerEvil-Thermostat/discussions/34) for more details.
 
-### Option 4: Local-Only Mode - **For Simple Environmental Monitoring**
+### Option 4: Simple Mode - **Just Display Temperature & Humidity**
 
-Turn your Nest into a standalone temperature and humidity display without any cloud connectivity.
+Turn your old Nest into a simple temperature and humidity display. No Wi-Fi, no internet, no complications.
 
-📖 **[View Local-Only Mode Guide](LOCAL_MODE.md)**
+📖 **[View Simple Mode Guide](LOCAL_MODE.md)**
 
-**Perfect for:**
-- Simple room monitoring (just temperature and humidity)
-- Offline installations without Wi-Fi
-- Privacy-focused users (no cloud data collection)
-- Repurposing legacy Nest hardware as environmental sensors
-- Backup environmental displays
+**Perfect for you if:**
+- You just want to see the temperature (no heating/cooling control)
+- You don't have Wi-Fi or prefer to stay offline
+- You care about privacy (nothing gets sent to the internet)
+- You want to give your old Nest a new purpose
 
-**Quick Install:**
+**Super Easy Setup:**
+```bash
+./quick-start.sh
+```
+
+Or if you know you want Simple Mode:
 ```bash
 ./install.sh --local-only
 ```

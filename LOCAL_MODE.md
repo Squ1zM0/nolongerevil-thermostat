@@ -28,21 +28,54 @@ To ensure stability and local operation, the following features are disabled:
 
 ### Prerequisites
 
-1. Follow the standard installation guide in [README.md](README.md) to flash the base firmware
-2. Ensure your Nest device is successfully flashed and booting
+1. Complete the basic setup from [README.md](README.md) (clone repo, install dependencies, build omap_loader)
+2. Ensure your Nest device is charged and ready for flashing
 
 ### Enabling Local-Only Mode
 
-After flashing your device with the standard firmware, you can enable local-only mode:
+To flash your device with the simplified local-only firmware:
 
 ```bash
 ./install.sh --local-only
 ```
 
 This will:
-1. Download the local-only firmware variant
-2. Configure the device for standalone operation
-3. Set the display to show temperature and humidity only
+1. Download the **simple firmware variant** (optimized for local-only operation)
+2. Build stripped-down firmware files if needed
+3. Flash the device with minimal features enabled
+4. Configure for standalone operation
+5. Set the display to show temperature and humidity only
+
+### Simple Firmware Variant
+
+Local-only mode uses a **simplified firmware variant** that includes only:
+- ✅ Temperature and humidity sensing
+- ✅ Display functionality  
+- ✅ Basic settings UI
+- ✅ Temperature alerts
+
+The simple firmware **excludes** all unnecessary features:
+- ❌ Cloud connectivity stack
+- ❌ Wi-Fi networking drivers
+- ❌ Smart scheduling engine
+- ❌ Learning algorithms
+- ❌ Remote control protocols
+- ❌ OTA update mechanisms
+
+This results in:
+- Smaller firmware size
+- Lower memory usage
+- Reduced power consumption
+- Fewer potential failure points
+- Faster boot times
+
+### Verification
+
+To verify you're using the simple firmware variant:
+
+```bash
+./verify-simple-firmware.sh
+```
 
 ### Manual Configuration
 
