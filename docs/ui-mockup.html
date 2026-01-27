@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nest Local-Only Mode - UI Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        /* Nest Device Frame */
+        .device-frame {
+            width: 480px;
+            height: 480px;
+            background: #2a2a2a;
+            border-radius: 50%;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 8px #1a1a1a,
+                inset 0 0 0 12px #3a3a3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Display Screen */
+        .display {
+            width: 400px;
+            height: 400px;
+            background: #000000;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 40px 20px 16px;
+            overflow: hidden;
+        }
+
+        /* Temperature */
+        .temperature {
+            font-size: 96px;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -2px;
+            line-height: 1.0;
+            margin: 0;
+            margin-top: 0;
+            text-align: center;
+            transition: all 300ms ease-in-out;
+        }
+
+        .temperature .degree {
+            font-size: 72px;
+            margin-left: -4px;
+            vertical-align: super;
+        }
+
+        /* Humidity */
+        .humidity {
+            font-size: 28px;
+            font-weight: 300;
+            color: #B0B0B0;
+            letter-spacing: 0;
+            line-height: 1.2;
+            margin-top: 20px;
+            text-align: center;
+            transition: all 300ms ease-in-out;
+        }
+
+        /* Status */
+        .status {
+            font-size: 12px;
+            font-weight: 400;
+            color: #707070;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        /* Controls */
+        .controls {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            min-width: 200px;
+        }
+
+        .control-group h3 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .control-group label {
+            color: #888;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .control-group input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .control-group select {
+            width: 100%;
+            padding: 8px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .button {
+            background: #00D9FF;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 4px;
+            transition: all 100ms ease-out;
+        }
+
+        .button:hover {
+            background: #00c0e6;
+        }
+
+        .button:active {
+            transform: scale(0.98);
+        }
+
+        .button.secondary {
+            background: #3a3a3a;
+            color: #fff;
+        }
+
+        .button.secondary:hover {
+            background: #4a4a4a;
+        }
+
+        /* Alert State */
+        .display.alert {
+            justify-content: center;
+        }
+
+        .alert-content {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .display.alert .alert-content {
+            display: block;
+        }
+
+        .display.alert .temperature,
+        .display.alert .humidity,
+        .display.alert .status {
+            display: none;
+        }
+
+        .alert-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .alert-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+        }
+
+        .alert-value {
+            font-size: 64px;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 8px;
+        }
+
+        .alert-threshold {
+            font-size: 16px;
+            font-weight: 300;
+            color: #B0B0B0;
+            margin-bottom: 20px;
+        }
+
+        .dismiss-button {
+            background: rgba(255, 107, 53, 0.2);
+            border: 1px solid #FF6B35;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: all 100ms ease-out;
+        }
+
+        .dismiss-button:hover {
+            background: rgba(255, 107, 53, 0.3);
+        }
+
+        .dismiss-button:active {
+            background: #FF6B35;
+        }
+
+        .info {
+            color: #888;
+            font-size: 12px;
+            margin-top: 20px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Power Mode Styles */
+        .display.low-power .temperature {
+            opacity: 0.6;
+        }
+
+        .display.low-power .humidity {
+            opacity: 0.4;
+        }
+
+        .display.night-mode .temperature {
+            opacity: 0.4;
+        }
+
+        .display.night-mode .humidity {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nest Local-Only Mode</h1>
+        <p class="subtitle">Clean, Minimalist UI Design</p>
+        
+        <div class="device-frame">
+            <div class="display" id="display">
+                <div class="temperature" id="temperature">
+                    <span id="temp-value">72</span><span class="degree">°</span>
+                </div>
+                <div class="humidity" id="humidity">
+                    Humidity <span id="humid-value">41</span>%
+                </div>
+                <div class="status">Local Mode</div>
+                
+                <!-- Alert Content (hidden by default) -->
+                <div class="alert-content">
+                    <div class="alert-icon">⚠</div>
+                    <div class="alert-title">High Temperature</div>
+                    <div class="alert-value">92°</div>
+                    <div class="alert-threshold">Threshold: 90°</div>
+                    <button class="dismiss-button" onclick="dismissAlert()">Dismiss</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>Temperature</h3>
+                <label>Value (°F)</label>
+                <input type="number" id="temp-input" value="72" min="0" max="120" 
+                       onchange="updateTemperature(this.value)">
+            </div>
+
+            <div class="control-group">
+                <h3>Humidity</h3>
+                <label>Value (%)</label>
+                <input type="number" id="humid-input" value="41" min="0" max="100" 
+                       onchange="updateHumidity(this.value)">
+            </div>
+
+            <div class="control-group">
+                <h3>Display Mode</h3>
+                <label>Power Mode</label>
+                <select onchange="setPowerMode(this.value)">
+                    <option value="standard">Standard</option>
+                    <option value="low-power">Low Power</option>
+                    <option value="night-mode">Night Mode</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="button" onclick="animateChange()">Simulate Update</button>
+            <button class="button secondary" onclick="showAlert()">Show Alert</button>
+            <button class="button secondary" onclick="resetValues()">Reset</button>
+        </div>
+
+        <p class="info">
+            This interactive mockup demonstrates the clean, minimalist UI design for Local-Only Mode.
+            The display prioritizes readability with large temperature text, secondary humidity information,
+            and a subtle status indicator. Try adjusting the values or power modes to see the design in action.
+        </p>
+    </div>
+
+    <script>
+        function updateTemperature(value) {
+            document.getElementById('temp-value').textContent = value;
+        }
+
+        function updateHumidity(value) {
+            document.getElementById('humid-value').textContent = value;
+        }
+
+        function setPowerMode(mode) {
+            const display = document.getElementById('display');
+            display.classList.remove('low-power', 'night-mode', 'alert');
+            if (mode !== 'standard') {
+                display.classList.add(mode);
+            }
+        }
+
+        function animateChange() {
+            const newTemp = Math.floor(Math.random() * 20) + 65; // 65-84
+            const newHumid = Math.floor(Math.random() * 30) + 30; // 30-59
+            
+            updateTemperature(newTemp);
+            updateHumidity(newHumid);
+            
+            document.getElementById('temp-input').value = newTemp;
+            document.getElementById('humid-input').value = newHumid;
+        }
+
+        function showAlert() {
+            const display = document.getElementById('display');
+            display.classList.add('alert');
+        }
+
+        function dismissAlert() {
+            const display = document.getElementById('display');
+            display.classList.remove('alert');
+        }
+
+        function resetValues() {
+            updateTemperature(72);
+            updateHumidity(41);
+            document.getElementById('temp-input').value = 72;
+            document.getElementById('humid-input').value = 41;
+            setPowerMode('standard');
+        }
+
+        // Simulate live updates
+        let autoUpdate = false;
+        function startAutoUpdate() {
+            if (autoUpdate) return;
+            autoUpdate = true;
+            setInterval(() => {
+                if (!document.getElementById('display').classList.contains('alert')) {
+                    const currentTemp = parseInt(document.getElementById('temp-value').textContent);
+                    const variation = (Math.random() - 0.5) * 2; // -1 to +1
+                    const newTemp = Math.max(60, Math.min(85, currentTemp + variation));
+                    
+                    if (Math.random() > 0.7) {
+                        updateTemperature(Math.round(newTemp));
+                    }
+                }
+            }, 5000);
+        }
+
+        // Uncomment to enable auto-updates
+        // startAutoUpdate();
+    </script>
+</body>
+</html>
