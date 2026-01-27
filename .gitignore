@@ -15,3 +15,6 @@ bin/firmware/
 # Temporary files
 *.zip
 *.tar.gz
+
+# CodeQL artifacts
+_codeql_detected_source_root

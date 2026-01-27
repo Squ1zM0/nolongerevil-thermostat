@@ -109,6 +109,15 @@ case "$OS" in
             echo "  pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make"
             exit 1
         fi
+
+        # Check for libusb
+        if ! pkg-config --exists libusb-1.0 2>/dev/null; then
+            echo "Warning: libusb-1.0 not detected via pkg-config"
+            echo "Attempting to use default MinGW paths..."
+            echo ""
+            echo "If build fails, install libusb with:"
+            echo "  pacman -S mingw-w64-x86_64-libusb"
+        fi
         ;;
 
     *)

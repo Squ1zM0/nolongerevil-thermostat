@@ -70,9 +70,9 @@ Or if you know you want Display-Only Mode:
 
 This directory contains the tools and firmware needed to flash custom firmware to Nest Thermostat devices using the OMAP DFU (Device Firmware Update) interface.
 
-### Prerequesites
+### Prerequisites
 
-You will need to have a Linux or MacOS computer available.
+You will need a computer running **Linux**, **macOS**, or **Windows**.
 
 ⚠️ Please verify your Nest is compatible at **[https://docs.nolongerevil.com/compatibility](https://docs.nolongerevil.com/compatibility)** - we currently only support Nest Generation 1 and 2 at the moment.
 
@@ -120,11 +120,48 @@ Then install libusb using Homebrew (the build script will attempt to install thi
 brew install libusb pkg-config
 ```
 
+#### Windows
+
+**Option A: Using MSYS2/MinGW (Recommended)**
+
+1. Download and install MSYS2 from [https://www.msys2.org/](https://www.msys2.org/)
+2. Open "MSYS2 MINGW64" terminal (not the regular MSYS2 terminal)
+3. Install required packages:
+   ```bash
+   pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-libusb mingw-w64-x86_64-pkg-config make
+   ```
+
+**Option B: Pre-built Binary**
+
+If you don't want to build from source, pre-built Windows binaries are available in the [Releases](https://github.com/codykociemba/NoLongerEvil-Thermostat/releases) section.
+
+**USB Driver Installation (Required for Windows)**
+
+Windows requires a USB driver to communicate with the Nest in DFU mode:
+
+1. Download [Zadig](https://zadig.akeo.ie/)
+2. Put your Nest in DFU mode (see Step 5 below)
+3. In Zadig, select "List All Devices" from the Options menu
+4. Find "Texas Instruments OMAP" or similar device
+5. Select "WinUSB" or "libusb-win32" as the driver
+6. Click "Install Driver" or "Replace Driver"
+
 ### 3. Build the omap_loader tool
 
+**Linux/macOS:**
 ```bash
 chmod +x build.sh
 ./build.sh
+```
+
+**Windows (MSYS2 MINGW64 terminal):**
+```bash
+./build.sh
+```
+
+**Windows (PowerShell - requires MSYS2 installed):**
+```powershell
+.\build.ps1
 ```
 
 The build script will automatically detect your operating system and build the appropriate binary.
@@ -133,12 +170,25 @@ The build script will automatically detect your operating system and build the a
 
 **IMPORTANT: You must start the installer script BEFORE rebooting the device.**
 
+**Linux/macOS:**
 ```bash
 chmod +x install.sh
 ./install.sh
 ```
 
+**Windows (MSYS2 MINGW64 terminal):**
+```bash
+./install.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\install.ps1
+```
+
 **Note for macOS:** You may need to grant USB permissions. If you encounter permission issues, check System Preferences → Security & Privacy.
+
+**Note for Windows:** Run PowerShell as Administrator if you encounter permission issues.
 
 The script will wait for the device to enter DFU mode.
 
