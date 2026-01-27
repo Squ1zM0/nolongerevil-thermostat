@@ -1,48 +1,93 @@
-# Local-Only / Dumb Mode
+# Display-Only Mode (Temperature Monitor)
+
+## ⚠️ IMPORTANT: This is NOT a Working Thermostat
+
+Display-Only Mode turns your Nest into a **temperature and humidity monitor ONLY**. It will **NOT control your heating or cooling system**. All thermostat functions are completely disabled.
 
 ## Overview
 
-Local-Only Mode turns your Nest Thermostat into a simple, standalone environmental display that operates entirely without cloud connectivity or smart features.
+This mode repurposes your Nest hardware as a standalone environmental monitor that operates entirely without cloud connectivity, smart features, or HVAC control.
 
-## Features
+## What You Get
 
-When enabled, your thermostat will:
+When enabled, your device will:
 
+- ✅ **Display temperature and humidity** - Shows current readings on screen
 - ✅ **Operate entirely locally** - No cloud or API dependency
-- ✅ **Display environmental data** - Temperature (°F) and Humidity (%)
 - ✅ **Work offline** - Functions without Wi-Fi or internet
-- ✅ **Low complexity** - Minimal failure points
-- ✅ **Always-on display** - Continuous monitoring
+- ✅ **Low power consumption** - Minimal features mean longer battery life
+- ✅ **Privacy focused** - No data sent anywhere
 
-### Disabled Features
+## What You DON'T Get (Disabled Features)
 
-To ensure stability and local operation, the following features are disabled:
+⚠️ **This is NOT a thermostat anymore.** The following are completely disabled:
 
-- ❌ Cloud connectivity and remote control
-- ❌ Scheduling and learning algorithms
-- ❌ Occupancy detection
-- ❌ Mobile app integration
-- ❌ Automatic updates
+- ❌ **Heating and cooling control** - Cannot turn HVAC on/off
+- ❌ **Thermostat functions** - Not a working thermostat at all
+- ❌ **Cloud connectivity and remote control**
+- ❌ **Scheduling and learning algorithms**
+- ❌ **Occupancy detection**
+- ❌ **Mobile app integration**
+- ❌ **Automatic updates**
+
+**Think of it as:** A digital temperature/humidity sensor mounted on your wall, not a thermostat.
 
 ## Installation
 
 ### Prerequisites
 
-1. Follow the standard installation guide in [README.md](README.md) to flash the base firmware
-2. Ensure your Nest device is successfully flashed and booting
+1. Complete the basic setup from [README.md](README.md) (clone repo, install dependencies, build omap_loader)
+2. Ensure your Nest device is charged and ready for flashing
 
-### Enabling Local-Only Mode
+### Enabling Display-Only Mode
 
-After flashing your device with the standard firmware, you can enable local-only mode:
+To set up your device as a temperature/humidity monitor (NOT a thermostat):
 
 ```bash
 ./install.sh --local-only
 ```
 
 This will:
-1. Download the local-only firmware variant
-2. Configure the device for standalone operation
-3. Set the display to show temperature and humidity only
+1. Download the **display-only firmware variant** (optimized for monitoring)
+2. Build stripped-down firmware files if needed
+3. Flash the device with HVAC control disabled
+4. Configure for standalone temperature monitoring
+5. Set the display to show temperature and humidity only
+
+⚠️ **Remember:** After this installation, your device will NOT control heating or cooling.
+
+### Simple Firmware Variant
+
+Display-Only mode uses a **simplified firmware variant** that includes only:
+- ✅ Temperature and humidity sensing
+- ✅ Display functionality  
+- ✅ Basic settings UI
+- ✅ Temperature alerts
+
+The simple firmware **excludes** all unnecessary features:
+- ❌ **HVAC control** (heating/cooling disabled)
+- ❌ **Thermostat functions** 
+- ❌ Cloud connectivity stack
+- ❌ Wi-Fi networking drivers
+- ❌ Smart scheduling engine
+- ❌ Learning algorithms
+- ❌ Remote control protocols
+- ❌ OTA update mechanisms
+
+This results in:
+- Smaller firmware size
+- Lower memory usage
+- Reduced power consumption
+- Fewer potential failure points
+- Faster boot times
+
+### Verification
+
+To verify you're using the simple firmware variant:
+
+```bash
+./verify-simple-firmware.sh
+```
 
 ### Manual Configuration
 
