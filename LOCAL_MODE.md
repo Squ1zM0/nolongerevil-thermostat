@@ -169,9 +169,11 @@ Alternatively, reflash the device using the standard installation:
 ## Support
 
 For issues or questions:
-- Check the [main README](README.md) for general troubleshooting
+- Check the [FAQ and Troubleshooting Guide](docs/FAQ.md) for common issues
+- Review the [main README](README.md) for general troubleshooting
 - Visit [Discord](https://discord.gg/hackhouse) for community support
-- Review [documentation](https://docs.nolongerevil.com) for detailed guides
+- Check [documentation](https://docs.nolongerevil.com) for detailed guides
+- See [UI Mockups](docs/UI_MOCKUP.md) for design specifications
 
 ## Contributing
 
