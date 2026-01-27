@@ -38,6 +38,24 @@ Host your own No Longer Evil server infrastructure. Requires technical expertise
 
 ⚠️ **Warning:** This option is still a work in progress and may or may not function properly. Check out the [discussion here](https://github.com/codykociemba/NoLongerEvil-Thermostat/discussions/34) for more details.
 
+### Option 4: Local-Only Mode - **For Simple Environmental Monitoring**
+
+Turn your Nest into a standalone temperature and humidity display without any cloud connectivity.
+
+📖 **[View Local-Only Mode Guide](LOCAL_MODE.md)**
+
+**Perfect for:**
+- Simple room monitoring (just temperature and humidity)
+- Offline installations without Wi-Fi
+- Privacy-focused users (no cloud data collection)
+- Repurposing legacy Nest hardware as environmental sensors
+- Backup environmental displays
+
+**Quick Install:**
+```bash
+./install.sh --local-only
+```
+
 ---
 
 ## Manual Installation (Option 2)
@@ -156,6 +174,62 @@ To link your Nest device to your No Longer Evil account:
 2. The device will display a unique entry code
 3. Enter this code on the No Longer Evil dashboard
 4. Your device is now linked and ready to use!
+
+---
+
+## Local-Only Mode Installation
+
+Want to use your Nest as a simple temperature and humidity display without cloud connectivity? Follow these alternative steps:
+
+### Prerequisites
+
+Complete steps 1-3 from the standard installation above (clone repository, install prerequisites, build omap_loader).
+
+### Install with Local-Only Mode
+
+Instead of running the standard `./install.sh`, use the local-only flag:
+
+```bash
+chmod +x install.sh
+./install.sh --local-only
+```
+
+This will:
+- Flash the device with modified firmware
+- Configure for standalone operation (no cloud)
+- Set up the display to show temperature and humidity only
+- Disable Wi-Fi to save power
+
+### What You Get
+
+After installation, your Nest will:
+- ✅ Display large temperature reading (°F)
+- ✅ Show humidity percentage below temperature
+- ✅ Update every 5 seconds
+- ✅ Work completely offline
+- ✅ Operate with minimal power consumption
+
+### No Account Setup Required
+
+Unlike the standard installation, local-only mode does **not** require:
+- Creating an account at nolongerevil.com
+- Linking the device with an entry code
+- Any internet connection
+- Wi-Fi network access
+
+The device will boot and immediately start displaying sensor data.
+
+### Customization
+
+After installation, you can customize settings by pressing and holding the display for 3 seconds:
+- Change temperature unit (°F / °C)
+- Adjust display brightness
+- Configure refresh rate
+- Set temperature alerts
+
+For complete documentation, see **[LOCAL_MODE.md](LOCAL_MODE.md)**.
+
+---
 
 ## Security Considerations
 
