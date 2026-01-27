@@ -3,13 +3,54 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Parse command line arguments
+LOCAL_ONLY_MODE=false
+FORCE_DOWNLOAD=false
+
+for arg in "$@"; do
+    case $arg in
+        --local-only)
+            LOCAL_ONLY_MODE=true
+            ;;
+        --force-download)
+            FORCE_DOWNLOAD=true
+            ;;
+        --help)
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --local-only       Install in local-only/dumb mode (no cloud connectivity)"
+            echo "  --force-download   Force re-download of firmware files"
+            echo "  --help            Show this help message"
+            echo ""
+            echo "Local-Only Mode:"
+            echo "  Installs firmware configured for standalone operation without cloud"
+            echo "  connectivity. Device will display temperature and humidity only."
+            echo "  See LOCAL_MODE.md for more information."
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $arg"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
+
 # Detect OS and architecture
 OS="$(uname -s)"
 ARCH="$(uname -m)"
 
-echo "========================================="
-echo "NoLongerEvil Firmware Installer"
-echo "========================================="
+if [ "$LOCAL_ONLY_MODE" = true ]; then
+    echo "========================================="
+    echo "NoLongerEvil Firmware Installer"
+    echo "LOCAL-ONLY MODE"
+    echo "========================================="
+else
+    echo "========================================="
+    echo "NoLongerEvil Firmware Installer"
+    echo "========================================="
+fi
 echo "Detected OS: $OS"
 echo "Detected Architecture: $ARCH"
 echo ""
@@ -74,7 +115,7 @@ if [ -f "$FIRMWARE_DIR/x-load-gen2.bin" ]; then
 fi
 
 # Force download if --force-download flag is provided
-if [ "$1" = "--force-download" ]; then
+if [ "$FORCE_DOWNLOAD" = true ]; then
     SKIP_DOWNLOAD=false
 fi
 
@@ -135,6 +176,42 @@ else
 
     echo "Firmware files extracted successfully!"
     echo ""
+fi
+
+# Handle local-only mode configuration
+if [ "$LOCAL_ONLY_MODE" = true ]; then
+    echo "========================================="
+    echo "Local-Only Mode Configuration"
+    echo "========================================="
+    echo ""
+    echo "Local-only mode will configure your Nest as a simple environmental"
+    echo "display showing only temperature and humidity."
+    echo ""
+    echo "Features in local-only mode:"
+    echo "  ✓ Displays temperature (°F) and humidity (%)"
+    echo "  ✓ Works completely offline (no Wi-Fi required)"
+    echo "  ✓ Low power consumption"
+    echo "  ✓ Minimal complexity and failure points"
+    echo ""
+    echo "Disabled features:"
+    echo "  ✗ Cloud connectivity and remote control"
+    echo "  ✗ Scheduling and learning"
+    echo "  ✗ Mobile app integration"
+    echo ""
+    
+    # Copy configuration file to firmware directory
+    CONFIG_SRC="$SCRIPT_DIR/configs/local-only-mode.conf"
+    CONFIG_DEST="$FIRMWARE_DIR/local-only-mode.conf"
+    
+    if [ -f "$CONFIG_SRC" ]; then
+        cp "$CONFIG_SRC" "$CONFIG_DEST"
+        echo "✓ Local-only configuration prepared"
+        echo ""
+    else
+        echo "Warning: Configuration file not found at $CONFIG_SRC"
+        echo "Proceeding with default local-only settings..."
+        echo ""
+    fi
 fi
 
 # Prompt for Nest generation
@@ -229,14 +306,38 @@ if [ $? -eq 0 ]; then
     echo "Firmware installed successfully!"
     echo "========================================="
     echo ""
-    echo "Next steps:"
-    echo "1. Keep the device plugged in via USB"
-    echo "2. Wait 2-3 minutes for the device to boot"
-    echo "3. You should see the NoLongerEvil logo"
-    echo "4. Visit https://nolongerevil.com to register"
-    echo "5. Link your device using the entry code from:"
-    echo "   Settings → Nest App → Get Entry Code"
-    echo ""
+    
+    if [ "$LOCAL_ONLY_MODE" = true ]; then
+        echo "LOCAL-ONLY MODE - Next steps:"
+        echo "1. Keep the device plugged in via USB"
+        echo "2. Wait 2-3 minutes for the device to boot"
+        echo "3. You should see the NoLongerEvil logo"
+        echo "4. Device will automatically enter local-only mode"
+        echo "5. Display will show: Temperature (°F) and Humidity (%)"
+        echo ""
+        echo "The device is now configured for standalone operation."
+        echo "No internet connection or account setup is required."
+        echo ""
+        echo "Configuration:"
+        echo "  • Cloud connectivity: DISABLED"
+        echo "  • Wi-Fi: DISABLED (saves power)"
+        echo "  • Display: Temperature + Humidity"
+        echo "  • Refresh rate: Every 5 seconds"
+        echo ""
+        echo "To access settings, press and hold the display for 3 seconds."
+        echo ""
+        echo "For more information, see LOCAL_MODE.md"
+        echo ""
+    else
+        echo "Next steps:"
+        echo "1. Keep the device plugged in via USB"
+        echo "2. Wait 2-3 minutes for the device to boot"
+        echo "3. You should see the NoLongerEvil logo"
+        echo "4. Visit https://nolongerevil.com to register"
+        echo "5. Link your device using the entry code from:"
+        echo "   Settings → Nest App → Get Entry Code"
+        echo ""
+    fi
 else
     echo ""
     echo "========================================="
