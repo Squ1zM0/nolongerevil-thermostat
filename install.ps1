@@ -178,7 +178,6 @@ $XLoadFile = Join-Path $FirmwareDir "x-load-gen2.bin"
 if (Test-Path $XLoadFile) {
     $RedownloadDelay = 3600
     $CurrentTime = [int][double]::Parse((Get-Date -UFormat %s))
-    $FileTime = [int][double]::Parse((Get-Item $XLoadFile).CreationTime.ToString("yyyyMMddHHmmss"))
     $FileCreationTime = [int][double]::Parse((Get-Date (Get-Item $XLoadFile).CreationTime -UFormat %s))
     $TimeDiff = $CurrentTime - $FileCreationTime
     

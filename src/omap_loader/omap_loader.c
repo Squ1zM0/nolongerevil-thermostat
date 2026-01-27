@@ -45,7 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   #include <windows.h>
   #include <io.h>
   /* Windows compatibility: usleep replacement using Sleep */
-  #define usleep(us) Sleep((us) / 1000 == 0 ? 1 : (us) / 1000)
+  #define usleep(us) Sleep((us) < 1000 ? 1 : (us) / 1000)
   
   /* Windows compatibility: basename replacement */
   static char * win_basename(char * path) {
