@@ -40,10 +40,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # include <arpa/inet.h>
 #endif
 
-#include <unistd.h> /* for usleep and friends */
+/* Platform-specific includes and compatibility */
+#ifdef _WIN32
+  #include <windows.h>
+  #include <io.h>
+  /* Windows compatibility: usleep replacement using Sleep */
+  #define usleep(us) Sleep((us) / 1000 == 0 ? 1 : (us) / 1000)
+  
+  /* Windows compatibility: basename replacement */
+  static char * win_basename(char * path) {
+    char * base = strrchr(path, '\\');
+    if (!base) base = strrchr(path, '/');
+    return base ? base + 1 : path;
+  }
+  #define basename(p) win_basename(p)
+#else
+  #include <unistd.h> /* for usleep and friends */
+  #include <libgen.h> /* for basename */
+#endif
+
 #include <getopt.h>
 #include <errno.h>
-#include <libgen.h> /* for basename */
 
 #include <libusb.h> /* the main event */
 

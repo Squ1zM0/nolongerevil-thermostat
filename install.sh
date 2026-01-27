@@ -170,6 +170,21 @@ case "$OS" in
     MINGW*|MSYS*|CYGWIN*)
         OMAP_LOADER="$SCRIPT_DIR/bin/windows-x64/omap_loader.exe"
         USE_SUDO=""
+        echo ""
+        echo "========================================="
+        echo "Windows USB Driver Reminder"
+        echo "========================================="
+        echo ""
+        echo "Make sure you have installed the USB driver for the Nest DFU device!"
+        echo ""
+        echo "If you haven't installed the driver yet:"
+        echo "1. Download Zadig from https://zadig.akeo.ie/"
+        echo "2. Put your Nest in DFU mode first"
+        echo "3. In Zadig, select Options -> List All Devices"
+        echo "4. Find 'Texas Instruments OMAP' or similar"
+        echo "5. Select 'WinUSB' or 'libusb-win32' as the driver"
+        echo "6. Click 'Install Driver' or 'Replace Driver'"
+        echo ""
         ;;
     *)
         echo "Error: Unsupported operating system: $OS"
@@ -210,10 +225,23 @@ SKIP_DOWNLOAD=false
 if [ -f "$FIRMWARE_DIR/x-load-gen2.bin" ]; then
     REDOWNLOAD_DELAY=3600
     CURRENT_TIME=$(date +%s)
-    FILE_MTIME=$(stat -c %W "$FIRMWARE_DIR/x-load-gen2.bin" 2>/dev/null || echo $(($REDOWNLOAD_DELAY + 1)))
+    
+    # Platform-specific stat command for file modification time
+    case "$OS" in
+        Linux*|MINGW*|MSYS*|CYGWIN*)
+            FILE_MTIME=$(stat -c %Y "$FIRMWARE_DIR/x-load-gen2.bin" 2>/dev/null || echo 0)
+            ;;
+        Darwin*)
+            FILE_MTIME=$(stat -f %m "$FIRMWARE_DIR/x-load-gen2.bin" 2>/dev/null || echo 0)
+            ;;
+        *)
+            FILE_MTIME=0
+            ;;
+    esac
+    
     TIME_DIFF=$((CURRENT_TIME - FILE_MTIME))
 
-    # Skip download if file was created within the last hour (3600 seconds)
+    # Skip download if file was modified within the last hour (3600 seconds)
     if [ $TIME_DIFF -lt $REDOWNLOAD_DELAY ]; then
         SKIP_DOWNLOAD=true
     fi
@@ -236,13 +264,24 @@ else
     echo "========================================="
     echo ""
 
-    # Rename existing firmware files with their creation times as suffix
+    # Rename existing firmware files with their modification times as suffix
     for fw_file in "$FIRMWARE_DIR"/{x-load-gen1,x-load-gen2,u-boot}.bin "$FIRMWARE_DIR"/uImage; do
         if [ -f "$fw_file" ]; then
-            FILE_CTIME=$(stat -c %Y "$fw_file" 2>/dev/null || echo .bak)
+            # Platform-specific stat command
+            case "$OS" in
+                Linux*|MINGW*|MSYS*|CYGWIN*)
+                    FILE_CTIME=$(stat -c %Y "$fw_file" 2>/dev/null || echo "bak")
+                    ;;
+                Darwin*)
+                    FILE_CTIME=$(stat -f %m "$fw_file" 2>/dev/null || echo "bak")
+                    ;;
+                *)
+                    FILE_CTIME="bak"
+                    ;;
+            esac
             FILE_NAME=$(basename "$fw_file")
             mv "$fw_file" "$FIRMWARE_DIR/${FILE_NAME}.${FILE_CTIME}"
-            echo "Renamed old file: $FILE_NAME → ${FILE_NAME}.${FILE_CTIME}"
+            echo "Renamed old file: $FILE_NAME -> ${FILE_NAME}.${FILE_CTIME}"
         fi
     done
     echo ""
