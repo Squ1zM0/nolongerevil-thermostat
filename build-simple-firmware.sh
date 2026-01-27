@@ -84,12 +84,13 @@ echo ""
 
 # Create metadata file
 METADATA_FILE="$FIRMWARE_DIR/simple-firmware.info"
-cat > "$METADATA_FILE" << 'EOF'
+BUILD_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+cat > "$METADATA_FILE" << EOF
 # Simple Firmware Variant Information
 # Generated for Local-Only Mode
 
 variant=simple
-build_date=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+build_date=$BUILD_DATE
 description=Simplified firmware for local-only operation
 features=temperature,humidity,display
 disabled=cloud,wifi,scheduling,learning,remote_control

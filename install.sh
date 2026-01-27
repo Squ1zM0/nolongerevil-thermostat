@@ -23,19 +23,20 @@ for arg in "$@"; do
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --local-only       Install in local-only mode (simple firmware, no cloud)"
-            echo "  --standard         Install in standard mode (full features, cloud-enabled)"
+            echo "  --local-only       Install Display-Only Mode (monitor only, NOT a thermostat)"
+            echo "  --standard         Install Full Thermostat Mode (working thermostat)"
             echo "  --force-download   Force re-download of firmware files"
             echo "  --help            Show this help message"
             echo ""
             echo "If no mode is specified, you will be prompted to choose interactively."
             echo ""
-            echo "Local-Only Mode:"
-            echo "  Simple firmware for standalone operation. Temperature & humidity display only."
+            echo "Display-Only Mode:"
+            echo "  ⚠️  NOT A THERMOSTAT - Temperature/humidity monitor ONLY"
+            echo "  Shows temperature and humidity on display. Does NOT control heating/cooling."
             echo "  No cloud, Wi-Fi, or smart features. Perfect for offline monitoring."
             echo ""
-            echo "Standard Mode:"
-            echo "  Full-featured firmware with cloud connectivity, remote control, scheduling,"
+            echo "Full Thermostat Mode:"
+            echo "  Full working thermostat with cloud connectivity, remote control, scheduling,"
             echo "  and integration with nolongerevil.com platform."
             echo ""
             echo "See LOCAL_MODE.md for detailed comparison."
@@ -67,19 +68,19 @@ if [ -z "$LOCAL_ONLY_MODE" ] && [ -z "$STANDARD_MODE" ]; then
     echo "========================================="
     echo ""
     echo "┌─────────────────────────────────────────────────────────────────┐"
-    echo "│ 1. SIMPLE MODE (Just Display Temperature)                      │"
-    echo "│    ✓ Easy-to-read temperature & humidity display               │"
+    echo "│ 1. DISPLAY-ONLY MODE (Temperature Monitor)                     │"
+    echo "│    ✓ Shows temperature & humidity on the display               │"
     echo "│    ✓ Works without Wi-Fi or internet                           │"
     echo "│    ✓ Completely private (no data sent anywhere)                │"
     echo "│    ✓ Uses less battery                                         │"
-    echo "│    ✗ Can't control heating/cooling                             │"
-    echo "│    ✗ No phone app or schedules                                 │"
+    echo "│    ✗ DOES NOT control heating or cooling                       │"
+    echo "│    ✗ No thermostat functions at all                            │"
     echo "│                                                                 │"
-    echo "│    Like a digital thermometer on your wall                     │"
+    echo "│    Just a display - NOT a working thermostat                   │"
     echo "└─────────────────────────────────────────────────────────────────┘"
     echo ""
     echo "┌─────────────────────────────────────────────────────────────────┐"
-    echo "│ 2. FULL FEATURES MODE (Smart Thermostat)                       │"
+    echo "│ 2. FULL THERMOSTAT MODE (Smart Control)                        │"
     echo "│    ✓ Control your heating and cooling                          │"
     echo "│    ✓ Access from your phone or computer                        │"
     echo "│    ✓ Set schedules to save energy                              │"
@@ -87,7 +88,7 @@ if [ -z "$LOCAL_ONLY_MODE" ] && [ -z "$STANDARD_MODE" ]; then
     echo "│    ✗ Needs Wi-Fi and internet                                  │"
     echo "│    ✗ Needs free account at nolongerevil.com                    │"
     echo "│                                                                 │"
-    echo "│    Like making your old Nest smart again                       │"
+    echo "│    Full working thermostat with smart features                 │"
     echo "└─────────────────────────────────────────────────────────────────┘"
     echo ""
     read -p "Choose 1 or 2: " MODE_CHOICE
@@ -95,7 +96,7 @@ if [ -z "$LOCAL_ONLY_MODE" ] && [ -z "$STANDARD_MODE" ]; then
     # Validate input
     while [[ ! "$MODE_CHOICE" =~ ^[12]$ ]]; do
         echo ""
-        echo "Please enter 1 for Simple Mode or 2 for Full Features."
+        echo "Please enter 1 for Display-Only or 2 for Full Thermostat."
         read -p "Choose 1 or 2: " MODE_CHOICE
     done
     
@@ -103,21 +104,22 @@ if [ -z "$LOCAL_ONLY_MODE" ] && [ -z "$STANDARD_MODE" ]; then
     
     if [ "$MODE_CHOICE" = "1" ]; then
         LOCAL_ONLY_MODE=true
-        echo "✓ You chose: SIMPLE MODE"
+        echo "✓ You chose: DISPLAY-ONLY MODE"
     else
         STANDARD_MODE=true
-        echo "✓ You chose: FULL FEATURES MODE"
+        echo "✓ You chose: FULL THERMOSTAT MODE"
     fi
     
     echo ""
     
     # Confirmation
     if [ "$LOCAL_ONLY_MODE" = true ]; then
-        echo "Your device will work as a simple display (temperature + humidity)."
+        echo "⚠️  IMPORTANT: Your device will ONLY show temperature/humidity."
+        echo "    It will NOT control heating or cooling at all."
         echo ""
-        read -p "Ready to continue? (y/n): " CONFIRM
+        read -p "Do you understand this is display-only, not a thermostat? (y/n): " CONFIRM
     else
-        echo "Your device will work as a full smart thermostat."
+        echo "Your device will work as a full thermostat with smart features."
         echo ""
         read -p "Ready to continue? (y/n): " CONFIRM
     fi
@@ -133,18 +135,21 @@ if [ -z "$LOCAL_ONLY_MODE" ] && [ -z "$STANDARD_MODE" ]; then
     echo ""
 fi
 
-# Set LOCAL_ONLY_MODE to false if STANDARD_MODE is true
+# Set mode flags based on command line
 if [ "$STANDARD_MODE" = true ]; then
     LOCAL_ONLY_MODE=false
+elif [ "$LOCAL_ONLY_MODE" != true ]; then
+    # If neither was set via command line, will prompt interactively below
+    LOCAL_ONLY_MODE=""
 fi
 
-# Convert LOCAL_ONLY_MODE to boolean if it's still a string
+# Display selected mode
 if [ "$LOCAL_ONLY_MODE" = true ]; then
-    echo "Installing in LOCAL-ONLY MODE"
+    echo "Installing in DISPLAY-ONLY MODE"
+    echo "(Temperature/Humidity Monitor - NOT a thermostat)"
     echo ""
-else
-    LOCAL_ONLY_MODE=false
-    echo "Installing in STANDARD MODE"
+elif [ "$LOCAL_ONLY_MODE" = false ]; then
+    echo "Installing in FULL THERMOSTAT MODE"
     echo ""
 fi
 

@@ -106,9 +106,9 @@ else
     
     # Check safety features
     if grep -q "temp_alerts_enabled=true" "$CONFIG_FILE"; then
-        pass "Temperature alerts enabled"
+        pass "Temperature alerts enabled (safety feature)"
     else
-        warn "Temperature alerts not enabled"
+        fail "Temperature alerts not enabled - SAFETY ISSUE"
     fi
 fi
 

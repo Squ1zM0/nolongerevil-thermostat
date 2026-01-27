@@ -34,8 +34,8 @@ echo "========================================="
 echo "Question 1: What do you want to do?"
 echo "========================================="
 echo ""
-echo "A) Just see the temperature and humidity on the display"
-echo "B) Control my heating/cooling and access from my phone"
+echo "A) Just display temperature and humidity (NOT a working thermostat)"
+echo "B) Actually control my heating and cooling (working thermostat)"
 echo ""
 read -p "Choose A or B: " USE_CASE
 
@@ -104,29 +104,31 @@ echo "========================================="
 echo ""
 
 if [ "$INSTALL_MODE" = "local-only" ]; then
-    echo -e "${GREEN}► SIMPLE MODE${NC} is perfect for you!"
+    echo -e "${GREEN}► DISPLAY-ONLY MODE${NC} is perfect for you!"
     echo ""
-    echo "Based on your answers, you'll get:"
-    echo "  ✓ Easy-to-read temperature & humidity display"
+    echo "⚠️  IMPORTANT: This is NOT a working thermostat!"
+    echo ""
+    echo "What you'll get:"
+    echo "  ✓ Temperature & humidity display"
     echo "  ✓ Works without Wi-Fi or internet"
     echo "  ✓ Completely private (no data sent anywhere)"
     echo "  ✓ Uses less battery power"
-    echo "  ✓ Super simple - just works!"
     echo ""
-    echo "What you won't get:"
-    echo "  ✗ Can't control heating/cooling"
-    echo "  ✗ No phone app or remote access"
-    echo "  ✗ No schedules or timers"
+    echo "What you WON'T get:"
+    echo "  ✗ NO heating/cooling control"
+    echo "  ✗ NO thermostat functions at all"
+    echo "  ✗ NO phone app or remote access"
+    echo "  ✗ NO schedules or timers"
     echo ""
-    echo "Think of it like a digital thermometer that sits on your wall."
+    echo "Think of it as a wall-mounted temperature sensor, not a thermostat."
     echo ""
     
-    read -p "Install SIMPLE MODE? (Y/n): " CONFIRM
+    read -p "Install DISPLAY-ONLY MODE (monitor only, NOT a thermostat)? (Y/n): " CONFIRM
 else
-    echo -e "${BLUE}► FULL FEATURES MODE${NC} is perfect for you!"
+    echo -e "${BLUE}► FULL THERMOSTAT MODE${NC} is perfect for you!"
     echo ""
-    echo "Based on your answers, you'll get:"
-    echo "  ✓ Control your heating and cooling"
+    echo "What you'll get:"
+    echo "  ✓ Full heating and cooling control"
     echo "  ✓ Access from your phone or computer"
     echo "  ✓ Set schedules and timers"
     echo "  ✓ Save energy with smart features"
@@ -137,15 +139,15 @@ else
     echo "  • Internet connection"
     echo "  • Free account at nolongerevil.com"
     echo ""
-    echo "Think of it like making your old Nest smart again!"
+    echo "This is a fully working smart thermostat!"
     echo ""
     
-    read -p "Install FULL FEATURES MODE? (Y/n): " CONFIRM
+    read -p "Install FULL THERMOSTAT MODE? (Y/n): " CONFIRM
 fi
 
 CONFIRM=$(echo "$CONFIRM" | tr '[:lower:]' '[:upper:]')
 
-if [[ "$CONFIRM" =~ ^N ]]; then
+if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
     echo ""
     echo "No problem! Setup cancelled."
     echo ""
@@ -153,8 +155,8 @@ if [[ "$CONFIRM" =~ ^N ]]; then
     echo "  ./quick-start.sh"
     echo ""
     echo "Or if you know what you want:"
-    echo "  ./install.sh --local-only    (for Simple Mode)"
-    echo "  ./install.sh --standard      (for Full Features Mode)"
+    echo "  ./install.sh --local-only    (for Display-Only Mode - monitor only)"
+    echo "  ./install.sh --standard      (for Full Thermostat Mode)"
     exit 0
 fi
 
@@ -169,11 +171,11 @@ chmod +x "$SCRIPT_DIR/install.sh"
 
 # Run the appropriate installation
 if [ "$INSTALL_MODE" = "local-only" ]; then
-    echo "Setting up SIMPLE MODE..."
+    echo "Setting up DISPLAY-ONLY MODE (temperature monitor)..."
     echo ""
     "$SCRIPT_DIR/install.sh" --local-only
 else
-    echo "Setting up FULL FEATURES MODE..."
+    echo "Setting up FULL THERMOSTAT MODE..."
     echo ""
     "$SCRIPT_DIR/install.sh" --standard
 fi
