@@ -75,14 +75,6 @@ if (-not (Test-Path "NestFlasher.exe")) {
     Write-Host "✓ NestFlasher.exe found"
 }
 
-if (-not (Test-Path "FlashingGUI.exe")) {
-    Write-Host "✗ FlashingGUI.exe not found!"
-    Write-Host "  Run: .\build-gui.ps1"
-    $AllFilesExist = $false
-} else {
-    Write-Host "✓ FlashingGUI.exe found"
-}
-
 # Check for omap_loader
 $OmapLoader = "..\bin\windows-x64\omap_loader.exe"
 if (-not (Test-Path $OmapLoader)) {

@@ -9,6 +9,7 @@ import os
 import subprocess
 import threading
 import time
+import hashlib
 from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox
@@ -16,6 +17,11 @@ import winreg
 import urllib.request
 import zipfile
 import tempfile
+
+# Configuration constants
+FIRMWARE_VERSION = "v1.0.0"
+FIRMWARE_CACHE_DURATION = 3600  # 1 hour in seconds
+FIRMWARE_BASE_URL = f"https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{FIRMWARE_VERSION}"
 
 class NestFlasherGUI:
     def __init__(self, root):
@@ -29,7 +35,8 @@ class NestFlasherGUI:
             icon_path = Path(__file__).parent / "icon.ico"
             if icon_path.exists():
                 self.root.iconbitmap(str(icon_path))
-        except:
+        except Exception as e:
+            # Icon is optional, silently continue if it fails
             pass
         
         # Variables
@@ -172,18 +179,18 @@ class NestFlasherGUI:
         self.log("\nChecking firmware files...")
         
         if self.firmware_type.get() == "local-only":
-            firmware_url = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-local-only.zip"
+            firmware_url = f"{FIRMWARE_BASE_URL}/firmware-local-only.zip"
         else:
-            firmware_url = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
+            firmware_url = f"{FIRMWARE_BASE_URL}/firmware-files.zip"
         
         # Check if firmware files already exist
         gen = self.nest_generation.get()
         x_load_file = self.firmware_dir / f"x-load-gen{gen}.bin"
         
         if x_load_file.exists():
-            # Check if file is recent (within 1 hour)
+            # Check if file is recent (within FIRMWARE_CACHE_DURATION)
             file_age = time.time() - x_load_file.stat().st_mtime
-            if file_age < 3600:
+            if file_age < FIRMWARE_CACHE_DURATION:
                 self.log("✓ Using existing firmware files (recently downloaded)")
                 return True
         
@@ -195,8 +202,10 @@ class NestFlasherGUI:
             # Create firmware directory if it doesn't exist
             self.firmware_dir.mkdir(parents=True, exist_ok=True)
             
-            # Download to temp file
-            temp_zip = tempfile.mktemp(suffix='.zip')
+            # Download to secure temp file
+            with tempfile.NamedTemporaryFile(suffix='.zip', delete=False) as temp_file:
+                temp_zip = temp_file.name
+            
             urllib.request.urlretrieve(firmware_url, temp_zip)
             
             self.log("✓ Download complete, extracting...")
@@ -205,7 +214,12 @@ class NestFlasherGUI:
             with zipfile.ZipFile(temp_zip, 'r') as zip_ref:
                 zip_ref.extractall(self.firmware_dir)
             
-            os.remove(temp_zip)
+            # Clean up temp file
+            try:
+                os.remove(temp_zip)
+            except Exception:
+                pass  # Best effort cleanup
+            
             self.log("✓ Firmware extracted successfully")
             return True
             

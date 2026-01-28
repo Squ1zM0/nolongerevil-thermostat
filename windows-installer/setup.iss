@@ -6,6 +6,7 @@
 #define MyAppPublisher "NoLongerEvil"
 #define MyAppURL "https://nolongerevil.com"
 #define MyAppExeName "NestFlasher.exe"
+#define FirmwareVersion "v1.0.0"
 
 [Setup]
 ; Basic application information
@@ -49,7 +50,6 @@ Name: "firmware_local"; Description: "Local-Only Firmware (Display Only)"; Types
 ; Core executable files
 Source: "..\bin\windows-x64\omap_loader.exe"; DestDir: "{app}\bin"; Flags: ignoreversion; Components: core
 Source: "NestFlasher.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: gui
-Source: "FlashingGUI.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: gui
 
 ; Firmware files - will be downloaded during installation
 Source: "..\bin\firmware\*.bin"; DestDir: "{app}\firmware"; Flags: ignoreversion external skipifsourcedoesntexist; Components: core
@@ -106,6 +106,8 @@ end;
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   ResultCode: Integer;
+  RetryCount: Integer;
+  MaxRetries: Integer;
 begin
   Result := True;
   
@@ -135,29 +137,66 @@ begin
     
     if FirmwareType = 'localonly' then
     begin
-      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-local-only.zip', 
+      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-local-only.zip', 
                        'firmware.zip', '');
     end
     else
     begin
-      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip',
+      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-files.zip',
                        'firmware.zip', '');
     end;
     
-    DownloadPage.Show;
-    try
+    MaxRetries := 3;
+    RetryCount := 0;
+    
+    while RetryCount < MaxRetries do
+    begin
+      DownloadPage.Show;
       try
-        DownloadPage.Download;
-        Result := True;
-      except
-        if DownloadPage.AbortedByUser then
-          Log('Download aborted by user.')
-        else
-          SuppressibleMsgBox(AddPeriod(GetExceptionMessage), mbCriticalError, MB_OK, IDOK);
-        Result := False;
+        try
+          DownloadPage.Download;
+          Result := True;
+          break;
+        except
+          if DownloadPage.AbortedByUser then
+          begin
+            Log('Download aborted by user.');
+            Result := False;
+            break;
+          end
+          else
+          begin
+            RetryCount := RetryCount + 1;
+            if RetryCount >= MaxRetries then
+            begin
+              if MsgBox('Failed to download firmware files.' + #13#10#13#10 +
+                       'You can continue installation and download firmware manually later.' + #13#10#13#10 +
+                       'Continue installation?', mbError, MB_YESNO) = IDYES then
+              begin
+                Result := True;
+                break;
+              end
+              else
+              begin
+                Result := False;
+                break;
+              end;
+            end
+            else
+            begin
+              if MsgBox('Download failed. Retry?' + #13#10#13#10 +
+                       'Attempt ' + IntToStr(RetryCount) + ' of ' + IntToStr(MaxRetries),
+                       mbError, MB_YESNO) = IDNO then
+              begin
+                Result := False;
+                break;
+              end;
+            end;
+          end;
+        end;
+      finally
+        DownloadPage.Hide;
       end;
-    finally
-      DownloadPage.Hide;
     end;
   end;
 end;
@@ -167,19 +206,30 @@ var
   ResultCode: Integer;
   FirmwareZip: String;
   FirmwareDir: String;
+  PSCommand: String;
 begin
   if CurStep = ssPostInstall then
   begin
-    // Extract firmware files
+    // Extract firmware files using PowerShell with proper path escaping
     FirmwareZip := ExpandConstant('{tmp}\firmware.zip');
     FirmwareDir := ExpandConstant('{app}\firmware');
     
     if FileExists(FirmwareZip) then
     begin
-      // Use PowerShell to extract
-      Exec('powershell.exe', 
-           '-ExecutionPolicy Bypass -Command "Expand-Archive -Path ''' + FirmwareZip + ''' -DestinationPath ''' + FirmwareDir + ''' -Force"',
-           '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      // Build PowerShell command with proper escaping
+      // Use single quotes around paths to prevent injection
+      PSCommand := '-ExecutionPolicy Bypass -Command "& {' +
+                   'Expand-Archive -LiteralPath ''' + FirmwareZip + ''' ' +
+                   '-DestinationPath ''' + FirmwareDir + ''' -Force' +
+                   '}"';
+      
+      Exec('powershell.exe', PSCommand, '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      
+      if ResultCode <> 0 then
+      begin
+        Log('Firmware extraction failed with code: ' + IntToStr(ResultCode));
+        // Not fatal - user can download firmware later
+      end;
     end;
   end;
 end;

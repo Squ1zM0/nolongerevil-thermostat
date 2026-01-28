@@ -109,10 +109,6 @@ if (Test-Path "dist\NestFlasher.exe") {
     Write-Host "✓ Build successful!"
     Write-Host ""
     Write-Host "Output: NestFlasher.exe"
-    
-    # Create FlashingGUI.exe as a copy for compatibility
-    Copy-Item "NestFlasher.exe" "FlashingGUI.exe"
-    Write-Host "        FlashingGUI.exe (copy)"
 } else {
     Write-Host ""
     Write-Host "ERROR: Build completed but executable not found!"
