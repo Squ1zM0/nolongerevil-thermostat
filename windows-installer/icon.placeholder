@@ -1,0 +1,19 @@
+# Placeholder for icon.ico
+# 
+# To add a proper icon to the Windows installer and GUI application:
+# 
+# 1. Create or obtain a .ico file for the NoLongerEvil Thermostat
+# 2. Save it as icon.ico in this directory
+# 3. The icon should be at least 256x256 pixels for best quality
+# 4. It will be used for:
+#    - The installer executable
+#    - The GUI application
+#    - Desktop shortcuts
+#    - Start Menu shortcuts
+# 
+# Until a proper icon is added, the build scripts will work but use default Windows icons.
+#
+# Recommended tools for creating .ico files:
+# - GIMP (free, open source): https://www.gimp.org/
+# - IcoFX: https://icofx.ro/
+# - Online converter: https://convertio.co/png-ico/

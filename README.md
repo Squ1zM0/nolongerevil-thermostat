@@ -20,17 +20,32 @@
 
 Choose the installation method that works best for you:
 
-### Option 1: Hosted (GUI Installer) - **Recommended**
+### Option 1: Windows All-in-One Installer - **Easiest for Windows Users**
 
-The easiest way to get started. Download our GUI installer that handles everything automatically.
+**NEW!** For Windows users, we now have a dedicated all-in-one installer with graphical interface:
+
+- ✅ One-click installation with GUI
+- ✅ Automatic firmware download
+- ✅ USB driver installation included
+- ✅ Step-by-step wizard
+- ✅ Auto-detection of connected devices
+- ✅ No command-line knowledge required
+
+📖 **[Windows Installer Guide](windows-installer/WINDOWS_INSTALLER_GUIDE.md)**
+
+Download `NoLongerEvil-Thermostat-Setup.exe` from the [Releases](https://github.com/codykociemba/NoLongerEvil-Thermostat/releases) page.
+
+### Option 2: Hosted (GUI Installer) - **Recommended for Linux/Mac**
+
+The easiest way to get started on Linux and Mac. Download our GUI installer that handles everything automatically.
 
 📖 **[View Installation Guide](https://docs.nolongerevil.com/hosted/installation)**
 
-### Option 2: Hosted (Manual)
+### Option 3: Hosted (Manual)
 
 If the GUI installer doesn't work for you, follow the manual installation steps below. This method uses command-line tools to flash the firmware.
 
-### Option 3: Self-Hosted - **Advanced Users Only**
+### Option 4: Self-Hosted - **Advanced Users Only**
 
 Host your own No Longer Evil server infrastructure. Requires technical expertise.
 
@@ -38,7 +53,7 @@ Host your own No Longer Evil server infrastructure. Requires technical expertise
 
 ⚠️ **Warning:** This option is still a work in progress and may or may not function properly. Check out the [discussion here](https://github.com/codykociemba/NoLongerEvil-Thermostat/discussions/34) for more details.
 
-### Option 4: Display-Only Mode - **Temperature Monitor (NOT a Thermostat)**
+### Option 5: Display-Only Mode - **Temperature Monitor (NOT a Thermostat)**
 
 ⚠️ **IMPORTANT:** This mode turns your Nest into a temperature/humidity display ONLY. It will NOT control heating or cooling.
 
@@ -122,7 +137,18 @@ brew install libusb pkg-config
 
 #### Windows
 
-**Option A: Using MSYS2/MinGW (Recommended)**
+**Option A: All-in-One Installer (Easiest - Recommended for Most Users)**
+
+The easiest way to get started on Windows is to use our all-in-one installer with GUI:
+
+1. Download `NoLongerEvil-Thermostat-Setup.exe` from [Releases](https://github.com/codykociemba/NoLongerEvil-Thermostat/releases)
+2. Run the installer as Administrator
+3. Follow the installation wizard
+4. Use the included GUI to flash your device
+
+See **[Windows Installer Guide](windows-installer/WINDOWS_INSTALLER_GUIDE.md)** for detailed instructions.
+
+**Option B: Using MSYS2/MinGW (For Advanced Users)**
 
 1. Download and install MSYS2 from [https://www.msys2.org/](https://www.msys2.org/)
 2. Open "MSYS2 MINGW64" terminal (not the regular MSYS2 terminal)
@@ -131,7 +157,7 @@ brew install libusb pkg-config
    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-libusb mingw-w64-x86_64-pkg-config make
    ```
 
-**Option B: Pre-built Binary**
+**Option C: Pre-built Binary**
 
 If you don't want to build from source, pre-built Windows binaries are available in the [Releases](https://github.com/codykociemba/NoLongerEvil-Thermostat/releases) section.
 

@@ -16,5 +16,14 @@ bin/firmware/
 *.zip
 *.tar.gz
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.spec
+build/
+dist/
+*.egg-info/
+
 # CodeQL artifacts
 _codeql_detected_source_root
