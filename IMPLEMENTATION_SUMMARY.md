@@ -13,12 +13,11 @@ Successfully implemented full functionality and proper flashing support for Disp
 - Multiple confirmation prompts emphasizing display-only nature
 - Help text explicitly states limitations
 
-### 2. Simple Firmware Variant
-**Problem Solved:** Need to flash different firmware for display-only vs full thermostat.  
+### 2. Unified Firmware with Runtime Configuration
+**Problem Solved:** Need to support different modes (display-only vs full thermostat).  
 **Solution:** 
 - Both modes use the same `firmware-files.zip` from the release
-- Created `build-simple-firmware.sh` to generate optimized firmware variants
-- Automatic firmware building if simple variants don't exist
+- Display-only mode is configured at runtime through configuration files
 - Firmware verification with `verify-simple-firmware.sh`
 - Metadata and checksums for integrity checking
 
@@ -49,17 +48,16 @@ All documentation updated to:
 ### New Scripts
 1. **quick-start.sh** - Interactive setup wizard for end users
 2. **flash-local-mode.sh** - Dedicated flashing helper with safety checks
-3. **build-simple-firmware.sh** - Generates simple firmware variants
-4. **verify-simple-firmware.sh** - Verifies simple firmware integrity
+3. **build-simple-firmware.sh** - Utility for generating firmware variants (optional)
+4. **verify-simple-firmware.sh** - Verifies firmware integrity
 5. **test-local-mode.sh** - Integration test suite
 6. **final-validation.sh** - Deployment readiness checker
 
 ### Modified Files
-1. **install.sh** - Added interactive mode selection, separate firmware downloads
+1. **install.sh** - Added interactive mode selection, unified firmware download for both modes
 2. **LOCAL_MODE.md** - Updated with clear warnings and new terminology
 3. **README.md** - Updated with display-only mode explanation
-4. **build-simple-firmware.sh** - Fixed metadata date generation
-5. **test-local-mode.sh** - Made temperature alerts mandatory (safety)
+4. **test-local-mode.sh** - Made temperature alerts mandatory (safety)
 
 ## Testing & Validation
 
