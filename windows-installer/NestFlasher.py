@@ -21,7 +21,7 @@ import tempfile
 # Configuration constants
 FIRMWARE_VERSION = "v1.0.0"
 FIRMWARE_CACHE_DURATION = 3600  # 1 hour in seconds
-FIRMWARE_BASE_URL = f"https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{FIRMWARE_VERSION}"
+FIRMWARE_BASE_URL = f"https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/{FIRMWARE_VERSION}"
 
 class NestFlasherGUI:
     def __init__(self, root):
@@ -178,8 +178,10 @@ class NestFlasherGUI:
         """Download firmware files if needed"""
         self.log("\nChecking firmware files...")
         
-        # Use the same firmware for both modes - firmware-files.zip is the only available release asset
-        firmware_url = f"{FIRMWARE_BASE_URL}/firmware-files.zip"
+        if self.firmware_type.get() == "local-only":
+            firmware_url = f"{FIRMWARE_BASE_URL}/firmware-local-only.zip"
+        else:
+            firmware_url = f"{FIRMWARE_BASE_URL}/firmware-files.zip"
         
         # Check if firmware files already exist
         gen = self.nest_generation.get()

@@ -13,11 +13,11 @@ Successfully implemented full functionality and proper flashing support for Disp
 - Multiple confirmation prompts emphasizing display-only nature
 - Help text explicitly states limitations
 
-### 2. Unified Firmware with Runtime Configuration
-**Problem Solved:** Need to support different modes (display-only vs full thermostat).  
+### 2. Simple Firmware Variant
+**Problem Solved:** Need to flash different firmware for display-only vs full thermostat.  
 **Solution:** 
-- Both modes use the same `firmware-files.zip` from the release
-- Display-only mode is configured at runtime through configuration files
+- Modified `install.sh` to download separate firmware (`firmware-local-only.zip`)
+- Firmware hosted on `Squ1zM0/nolongerevil-thermostat` repository releases
 - Firmware verification with `verify-simple-firmware.sh`
 - Metadata and checksums for integrity checking
 
@@ -147,13 +147,14 @@ Users can get help via:
 ## Technical Notes
 
 ### Firmware Variants
-Both modes use the same `firmware-files.zip` from the release:
-- **Standard**: Full thermostat features enabled
-- **Display-Only**: Configured for monitoring only
+Different firmware files are used for each mode:
+- **Standard**: Full thermostat firmware from `firmware-files.zip`
+- **Display-Only**: Simplified firmware from `firmware-local-only.zip`
+  - Smaller size
   - Lower power consumption
-  - HVAC control disabled at runtime
-  - Cloud/Wi-Fi features disabled
-  - No smart features enabled
+  - HVAC control disabled
+  - No cloud/Wi-Fi drivers
+  - No smart features
 
 ### Backward Compatibility
 - Original `--local-only` flag still works
