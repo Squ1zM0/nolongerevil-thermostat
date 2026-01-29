@@ -207,14 +207,9 @@ echo ""
 # Download and extract firmware files
 FIRMWARE_DIR="$SCRIPT_DIR/bin/firmware"
 
-# Select appropriate firmware URL based on mode
-if [ "$LOCAL_ONLY_MODE" = true ]; then
-    FIRMWARE_URL="https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-local-only.zip"
-    FIRMWARE_ZIP="$SCRIPT_DIR/bin/firmware-local-only.zip"
-else
-    FIRMWARE_URL="https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
-    FIRMWARE_ZIP="$SCRIPT_DIR/bin/firmware-files.zip"
-fi
+# Use the same firmware for both modes - firmware-files.zip is the only available release asset
+FIRMWARE_URL="https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
+FIRMWARE_ZIP="$SCRIPT_DIR/bin/firmware-files.zip"
 
 # Create bin and firmware directories if they don't exist
 mkdir -p "$SCRIPT_DIR/bin"

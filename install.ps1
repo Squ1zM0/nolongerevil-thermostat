@@ -155,14 +155,9 @@ Write-Host ""
 # Download and extract firmware files
 $FirmwareDir = Join-Path $ScriptDir "bin\firmware"
 
-# Select appropriate firmware URL based on mode
-if ($LocalOnlyMode) {
-    $FirmwareUrl = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-local-only.zip"
-    $FirmwareZip = Join-Path $ScriptDir "bin\firmware-local-only.zip"
-} else {
-    $FirmwareUrl = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
-    $FirmwareZip = Join-Path $ScriptDir "bin\firmware-files.zip"
-}
+# Use the same firmware for both modes - firmware-files.zip is the only available release asset
+$FirmwareUrl = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
+$FirmwareZip = Join-Path $ScriptDir "bin\firmware-files.zip"
 
 # Create bin and firmware directories if they don't exist
 if (-not (Test-Path (Join-Path $ScriptDir "bin"))) {

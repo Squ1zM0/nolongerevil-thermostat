@@ -178,10 +178,8 @@ class NestFlasherGUI:
         """Download firmware files if needed"""
         self.log("\nChecking firmware files...")
         
-        if self.firmware_type.get() == "local-only":
-            firmware_url = f"{FIRMWARE_BASE_URL}/firmware-local-only.zip"
-        else:
-            firmware_url = f"{FIRMWARE_BASE_URL}/firmware-files.zip"
+        # Use the same firmware for both modes - firmware-files.zip is the only available release asset
+        firmware_url = f"{FIRMWARE_BASE_URL}/firmware-files.zip"
         
         # Check if firmware files already exist
         gen = self.nest_generation.get()

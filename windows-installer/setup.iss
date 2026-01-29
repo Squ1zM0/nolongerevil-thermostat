@@ -135,16 +135,9 @@ begin
     // Download firmware files before installation
     DownloadPage.Clear;
     
-    if FirmwareType = 'localonly' then
-    begin
-      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-local-only.zip', 
-                       'firmware.zip', '');
-    end
-    else
-    begin
-      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-files.zip',
-                       'firmware.zip', '');
-    end;
+    // Use the same firmware for both modes - firmware-files.zip is the only available release asset
+    DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-files.zip',
+                     'firmware.zip', '');
     
     MaxRetries := 3;
     RetryCount := 0;
