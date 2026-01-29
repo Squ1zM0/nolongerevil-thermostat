@@ -150,8 +150,9 @@ if ($UseCompiler -eq "msys2") {
     $UnixSrcDir = $SrcDir -replace '\\', '/' -replace '^([A-Za-z]):', '/$1'
     $UnixTargetDir = $TargetDir -replace '\\', '/' -replace '^([A-Za-z]):', '/$1'
     
-    # Build command
+    # Build command - set MSYSTEM=MINGW64 to ensure gcc is found
     $BuildScript = @"
+export MSYSTEM=MINGW64
 export PATH="/mingw64/bin:`$PATH"
 cd "$UnixSrcDir"
 make clean
@@ -160,9 +161,9 @@ cp omap_loader.exe "$UnixTargetDir/"
 make clean
 "@
     
-    # Write build script to temp file
+    # Write build script to temp file without UTF-8 BOM (required for bash)
     $TempScript = [System.IO.Path]::GetTempFileName()
-    $BuildScript | Out-File -FilePath $TempScript -Encoding utf8 -NoNewline
+    [System.IO.File]::WriteAllText($TempScript, $BuildScript, (New-Object System.Text.UTF8Encoding $false))
     
     # Run build
     $Process = Start-Process -FilePath $Bash -ArgumentList "--login", "-c", "`"source $($TempScript -replace '\\', '/' -replace '^([A-Za-z]):', '/$1')`"" -Wait -PassThru -NoNewWindow
