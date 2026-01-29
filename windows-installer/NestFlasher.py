@@ -21,7 +21,7 @@ import tempfile
 # Configuration constants
 FIRMWARE_VERSION = "v1.0.0"
 FIRMWARE_CACHE_DURATION = 3600  # 1 hour in seconds
-FIRMWARE_BASE_URL = f"https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{FIRMWARE_VERSION}"
+FIRMWARE_BASE_URL = f"https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/{FIRMWARE_VERSION}"
 
 class NestFlasherGUI:
     def __init__(self, root):

@@ -209,10 +209,10 @@ FIRMWARE_DIR="$SCRIPT_DIR/bin/firmware"
 
 # Select appropriate firmware URL based on mode
 if [ "$LOCAL_ONLY_MODE" = true ]; then
-    FIRMWARE_URL="https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-local-only.zip"
+    FIRMWARE_URL="https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/v1.0.0/firmware-local-only.zip"
     FIRMWARE_ZIP="$SCRIPT_DIR/bin/firmware-local-only.zip"
 else
-    FIRMWARE_URL="https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
+    FIRMWARE_URL="https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/v1.0.0/firmware-files.zip"
     FIRMWARE_ZIP="$SCRIPT_DIR/bin/firmware-files.zip"
 fi
 

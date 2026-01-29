@@ -157,10 +157,10 @@ $FirmwareDir = Join-Path $ScriptDir "bin\firmware"
 
 # Select appropriate firmware URL based on mode
 if ($LocalOnlyMode) {
-    $FirmwareUrl = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-local-only.zip"
+    $FirmwareUrl = "https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/v1.0.0/firmware-local-only.zip"
     $FirmwareZip = Join-Path $ScriptDir "bin\firmware-local-only.zip"
 } else {
-    $FirmwareUrl = "https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/v1.0.0/firmware-files.zip"
+    $FirmwareUrl = "https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/v1.0.0/firmware-files.zip"
     $FirmwareZip = Join-Path $ScriptDir "bin\firmware-files.zip"
 }
 

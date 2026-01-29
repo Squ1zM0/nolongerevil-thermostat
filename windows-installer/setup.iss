@@ -137,12 +137,12 @@ begin
     
     if FirmwareType = 'localonly' then
     begin
-      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-local-only.zip', 
+      DownloadPage.Add('https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/{#FirmwareVersion}/firmware-local-only.zip', 
                        'firmware.zip', '');
     end
     else
     begin
-      DownloadPage.Add('https://github.com/codykociemba/NoLongerEvil-Thermostat/releases/download/{#FirmwareVersion}/firmware-files.zip',
+      DownloadPage.Add('https://github.com/Squ1zM0/nolongerevil-thermostat/releases/download/{#FirmwareVersion}/firmware-files.zip',
                        'firmware.zip', '');
     end;
     
